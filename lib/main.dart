@@ -78,10 +78,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Impeller Demo'),
+          title: Text('Impeller'),
         ),
         body: Center(
-
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Column(
@@ -97,12 +96,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                         var cachedAnimation = CachedLottie(
                             Size(150, 150),
                             widget.lottieAnimation);
-                        return CachedLottiePlayer(
-                          lottie: cachedAnimation,
-                        );
+
+                        final testStillImages = false;
+
+                        if (testStillImages) {
+                          return material.Image.network(
+                            'https://loremflickr.com/100/100/music?lock=$index',
+                          );
+                        } else {
+                          return CachedLottiePlayer(
+                            lottie: cachedAnimation,
+                          );
+                        }
                       }
                   ),
-
                 ),
               ],
             ),
