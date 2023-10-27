@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Janky scrolling issue'),
+          title: Text('Impeller Demo'),
         ),
         body: Center(
 
