@@ -148,7 +148,7 @@ class CachedLottie {
   }
 }
 
-// A Plater for the cached the images of the lottie animations
+// A Player for the cached the images of the lottie animations
 class CachedLottiePlayer extends StatefulWidget {
   final CachedLottie lottie;
   final AnimationController? controller;
