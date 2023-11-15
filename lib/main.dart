@@ -86,118 +86,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              children:  <Widget>[
+              children: <Widget>[
+                SwitchListTile(
+                  title: Text('Enable Render Cache'),
+                  value: _enableRenderCache,
+                  onChanged: (v) {
+                    setState(() {
+                      _enableRenderCache = v;
+                    });
+                  },
+                ),
                 Expanded(
                   child: GridView.builder(
                       itemCount: 250,
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3),
                       itemBuilder: (BuildContext context, int index) {
-                        var cachedAnimation = CachedLottie(
-                            Size(150, 150),
-                            widget.lottieAnimation);
-
-                        final testStillImages = false;
-
-                        if (testStillImages) {
-                          return material.Image.network(
-                            'https://loremflickr.com/100/100/music?lock=$index',
-                          );
-                        } else {
-                          return CachedLottiePlayer(
-                            lottie: cachedAnimation,
-                          );
-                        }
-                      }
-                  ),
+                        return Lottie(
+                          composition: widget.lottieAnimation,
+                          enableRenderCache: _enableRenderCache,
+                        );
+                      }),
                 ),
               ],
             ),
           ),
-
         ),
       ),
     );
   }
 }
-
-
-
-// A class to cache the images inside the lottie animations
-class CachedLottie {
-  final Size size;
-  final LottieComposition composition;
-  final List<Image?> images;
-  late final _drawable = LottieDrawable(composition);
-
-  CachedLottie(this.size, this.composition)
-      : images = List.filled(composition.durationFrames.ceil(), null);
-
-  Duration get duration => composition.duration;
-
-  Image imageAt(BuildContext context, double progress) {
-    var index = (images.length * progress).round() % images.length;
-    return images[index] ??= _takeImage(context, progress);
-  }
-
-  Image _takeImage(BuildContext context, double progress) {
-    var recorder = PictureRecorder();
-    var canvas = Canvas(recorder);
-
-    var devicePixelRatio = View.of(context).devicePixelRatio;
-
-    _drawable
-      ..setProgress(progress)
-      ..draw(canvas, Offset.zero & (size * devicePixelRatio));
-    var picture = recorder.endRecording();
-    return picture.toImageSync((size.width * devicePixelRatio).round(),
-        (size.height * devicePixelRatio).round());
-  }
-}
-
-// A Player for the cached the images of the lottie animations
-class CachedLottiePlayer extends StatefulWidget {
-  final CachedLottie lottie;
-  final AnimationController? controller;
-
-  const CachedLottiePlayer({
-    super.key,
-    required this.lottie,
-    this.controller,
-  });
-
-  @override
-  State<CachedLottiePlayer> createState() => _CachedLottiePlayerState();
-}
-
-class _CachedLottiePlayerState extends State<CachedLottiePlayer>
-    with TickerProviderStateMixin {
-  late final AnimationController _autoController =
-  AnimationController(vsync: this, duration: widget.lottie.duration)
-    ..repeat();
-
-  @override
-  Widget build(BuildContext context) {
-    var controller = widget.controller ?? _autoController;
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, _) {
-        var image = widget.lottie.imageAt(context, controller.value);
-        return material.RawImage(
-          image: image,
-          width: widget.lottie.size.width,
-          height: widget.lottie.size.height,
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _autoController.dispose();
-    super.dispose();
-  }
-
-}
-
-
