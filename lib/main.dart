@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   final List<String> items = List<String>.generate(60, (i) => '$i');
 
   //Fetch a lottie animation from network and preload
-  final _lottieAnimation = NetworkLottie('https://d305e11xqcgjdr.cloudfront.net/stickers/cl69ghdwt000100bx966hxbp6/20.zip').load();
+  final _lottieAnimation = NetworkLottie('https://d305e11xqcgjdr.cloudfront.net/stickers/cl69ghdwt000100bx966hxbp6/1.zip').load();
 
   @override
   void initState() {
