@@ -68,6 +68,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   final List<String> items = List<String>.generate(62, (i) => '$i');
+  late final _lottieCache = CachedLottie(Size(150, 150), widget.lottieAnimation);
 
   @override
   Widget build(BuildContext context) {
@@ -93,23 +94,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       gridDelegate:
                       const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                       itemBuilder: (BuildContext context, int index) {
-                        var cachedAnimation = CachedLottie(
-                            Size(150, 150),
-                            widget.lottieAnimation);
-
-                        final testStillImages = false;
-
-                        if (testStillImages) {
-                          return material.Image.network(
-                            'https://loremflickr.com/100/100/music?lock=$index',
-                          );
-                        } else {
-                          return CachedLottiePlayer(
-                            lottie: cachedAnimation,
-                          );
-                        }
-                      }
-                  ),
+                        return CachedLottiePlayer(lottie: _lottieCache);
+                      }),
                 ),
               ],
             ),
